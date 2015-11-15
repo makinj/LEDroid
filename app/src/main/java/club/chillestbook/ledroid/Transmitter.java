@@ -26,37 +26,21 @@ public class Transmitter {
     private int pause_low = 38750;
     private int _freq;
     private ConsumerIrManager irManager;
-    private Thread thread;
 
-    public Transmitter(int freq, Context context){
+    public Transmitter(Context context, int freq) {
         _freq = freq;
         irManager = (ConsumerIrManager) context.getSystemService(Context.CONSUMER_IR_SERVICE);
     }
 
-
-    public void stop(){
-        if(thread!=null) {
-            thread.interrupt();
-        }
+    public Transmitter(Context context) {
+        this(context, 38000);
     }
 
     public boolean compatible(){
         if(irManager.hasIrEmitter()) {
             ConsumerIrManager.CarrierFrequencyRange[] freqRange = irManager.getCarrierFrequencies();
-            if (freqRange[0].getMaxFrequency() >= _freq && freqRange[0].getMinFrequency() <= _freq) {
-                return true;
-            }else {
-                return false;
-            }
+            return freqRange[0].getMaxFrequency() >= _freq && freqRange[0].getMinFrequency() <= _freq;
         }else {
-            return false;
-        }
-    }
-
-    public boolean running(){
-        if(thread!=null){
-            return true;
-        }else{
             return false;
         }
     }
@@ -70,8 +54,15 @@ public class Transmitter {
         int[] pattern = constructHead();
         pattern = concat(pattern, int2pat(0x00));
         pattern = concat(pattern, int2pat(0xff));
-        pattern = concat(pattern, int2pat(((code/16)*16)+8));
-        pattern = concat(pattern, int2pat(((code%16)*16)+0x7));
+        if (code > 255) {
+            code -= 255;
+            pattern = concat(pattern, int2pat(((code / 16) * 16) + 8));
+            pattern = concat(pattern, int2pat(((code % 16) * 16) + 0x7));
+        } else {
+            pattern = concat(pattern, int2pat((code / 16) * 16));
+            pattern = concat(pattern, int2pat(((code % 16) * 16) + 0xf));
+        }
+
         pattern = concat(pattern, constructTag());
 
 

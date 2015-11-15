@@ -2,8 +2,6 @@ package club.chillestbook.ledroid;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
@@ -38,7 +36,7 @@ public class MyActivity extends Activity {
     }
 
     public void execCommand(View view){
-        Transmitter transmitter = new Transmitter(38000, getApplicationContext());
+        Transmitter transmitter = new Transmitter(getApplicationContext());
         transmitter.transmit(command);
     }
 

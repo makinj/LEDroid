@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="blue" type="color">#0000FF</item>
+    <item name="red" type="color">#FF0000</item>
+    <item name="green" type="color">#00FF00</item>
+    <item name="white" type="color">#FFFFFF</item>
+    <item name="black" type="color">#000000</item>
+    <item name="orange" type="color">#FF8000</item>
+    <item name="yellow" type="color">#FFFF00</item>
+    <item name="cyan" type="color">#00FFFF</item>
+    <item name="purple" type="color">#800080</item>
+    <item name="dark_gray" type="color">#888888</item>
+
+</resources>

@@ -27,6 +27,53 @@ public class Transmitter {
     private int _freq;
     private ConsumerIrManager irManager;
 
+    public enum Command {
+        GREEN(30, false),
+        DOWN(45, false),
+        YELLOW(60, false),
+        BLUE(90, false),
+        ON(105, false),
+        CYAN(120, false),
+        RED(150, false),
+        UP(165, false),
+        ORANGE(180, false),
+        WHITE(210, false),
+        OFF(225, false),
+        PURPLE(240, false),
+        M2(30, true),
+        J7(45, true),
+        M3(90, true),
+        F7(105, true),
+        M1(150, true),
+        J3(165, true),
+        M4(210, true),
+        F3(225, true);
+        public int code;
+        public boolean jumptype;
+
+        Command(int code, boolean jumptype) {
+            this.code = code;
+            this.jumptype = jumptype;
+        }
+
+        int upperCode() {
+            if (this.jumptype) {
+                return ((this.code / 16) * 16) + 8;
+            } else {
+                return (code / 16) * 16;
+            }
+        }
+
+        int lowerCode() {
+            if (this.jumptype) {
+                return ((this.code % 16) * 16) + 0x7;
+            } else {
+                return ((this.code % 16) * 16) + 0xf;
+            }
+        }
+
+    }
+
     public Transmitter(Context context, int freq) {
         _freq = freq;
         irManager = (ConsumerIrManager) context.getSystemService(Context.CONSUMER_IR_SERVICE);
@@ -45,28 +92,18 @@ public class Transmitter {
         }
     }
 
-    public void transmit(int code){
-        int[] pattern = constructPattern(code);
+    public void transmit(Command command) {
+        int[] pattern = constructPattern(command);
         irManager.transmit(_freq,pattern);
     }
 
-    private int[] constructPattern(int code){
+    private int[] constructPattern(Command command) {
         int[] pattern = constructHead();
         pattern = concat(pattern, int2pat(0x00));
         pattern = concat(pattern, int2pat(0xff));
-        if (code > 255) {
-            code -= 255;
-            pattern = concat(pattern, int2pat(((code / 16) * 16) + 8));
-            pattern = concat(pattern, int2pat(((code % 16) * 16) + 0x7));
-        } else {
-            pattern = concat(pattern, int2pat((code / 16) * 16));
-            pattern = concat(pattern, int2pat(((code % 16) * 16) + 0xf));
-        }
-
-        pattern = concat(pattern, constructTag());
-
-
-        return pattern;
+        pattern = concat(pattern, int2pat(command.upperCode()));
+        pattern = concat(pattern, int2pat(command.lowerCode()));
+        return concat(pattern, constructTag());
     }
 
     private int[] constructHead() {

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<club.chillestbook.ledroid.SquareLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/led_button_cell_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:textSize="12sp" />
+
+</club.chillestbook.ledroid.SquareLayout>

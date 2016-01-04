@@ -24,63 +24,47 @@ public class Transmitter {
     private int tag_high_pulse =9000;
     private int tag_low_pulse =2000;
     private int pause_low = 38750;
-    private int _freq;
+    private int _freq = 38000;
     private ConsumerIrManager irManager;
 
     public enum Command {
-        GREEN(30, false),
-        DOWN(45, false),
-        YELLOW(60, false),
-        BLUE(90, false),
-        ON(105, false),
-        CYAN(120, false),
-        RED(150, false),
-        UP(165, false),
-        ORANGE(180, false),
-        WHITE(210, false),
-        OFF(225, false),
-        PURPLE(240, false),
-        M2(30, true),
-        J7(45, true),
-        M3(90, true),
-        F7(105, true),
-        M1(150, true),
-        J3(165, true),
-        M4(210, true),
-        F3(225, true);
+        GREEN(0x10),
+        DOWN(0x20),
+        YELLOW(0x30),
+        BLUE(0x50),
+        ON(0x60),
+        CYAN(0x70),
+        RED(0x90),
+        UP(0xa0),
+        ORANGE(0xb0),
+        WHITE(0xd0),
+        OFF(0xe0),
+        PURPLE(0xf0),
+        M2(0x18),
+        J7(0x28),
+        M3(0x58),
+        F7(0x68),
+        M1(0x98),
+        J3(0xa8),
+        M4(0xd8),
+        F3(0xe8);
         public int code;
-        public boolean jumptype;
 
-        Command(int code, boolean jumptype) {
+        Command(int code) {
             this.code = code;
-            this.jumptype = jumptype;
         }
 
-        int upperCode() {
-            if (this.jumptype) {
-                return ((this.code / 16) * 16) + 8;
-            } else {
-                return (code / 16) * 16;
-            }
+        int getCode() {
+            return this.code;
         }
 
-        int lowerCode() {
-            if (this.jumptype) {
-                return ((this.code % 16) * 16) + 0x7;
-            } else {
-                return ((this.code % 16) * 16) + 0xf;
-            }
+        int getInverse() {
+            return this.code ^ 0xff;
         }
-
-    }
-
-    public Transmitter(Context context, int freq) {
-        _freq = freq;
-        irManager = (ConsumerIrManager) context.getSystemService(Context.CONSUMER_IR_SERVICE);
     }
 
     public Transmitter(Context context) {
-        this(context, 38000);
+        irManager = (ConsumerIrManager) context.getSystemService(Context.CONSUMER_IR_SERVICE);
     }
 
     public boolean compatible(){
@@ -92,17 +76,17 @@ public class Transmitter {
         }
     }
 
-    public void transmit(Command command) {
+    public void transmit(int command) {
         int[] pattern = constructPattern(command);
         irManager.transmit(_freq,pattern);
     }
 
-    private int[] constructPattern(Command command) {
+    private int[] constructPattern(int command) {
         int[] pattern = constructHead();
         pattern = concat(pattern, int2pat(0x00));
         pattern = concat(pattern, int2pat(0xff));
-        pattern = concat(pattern, int2pat(command.upperCode()));
-        pattern = concat(pattern, int2pat(command.lowerCode()));
+        pattern = concat(pattern, int2pat(command));
+        pattern = concat(pattern, int2pat(command ^ 0xff));
         return concat(pattern, constructTag());
     }
 

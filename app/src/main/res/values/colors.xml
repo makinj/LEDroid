@@ -1,9 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <item name="blue" type="color">#0000FF</item>
+    <item name="blue0" type="color">#0000FF</item>
+    <item name="blue1" type="color">#200080</item>
+    <item name="blue2" type="color">#202040</item>
+    <item name="blue3" type="color">#503060</item>
+    <item name="blue4" type="color">#c04080</item>
+
     <item name="red" type="color">#FF0000</item>
-    <item name="green" type="color">#00FF00</item>
+    <item name="red0" type="color">#FF0000</item>
+    <item name="red1" type="color">#FF4000</item>
+    <item name="red2" type="color">#FF8000</item>
+    <item name="red3" type="color">#FFc000</item>
+    <item name="red4" type="color">#FFff00</item>
+
+    <item name="green" type="color">#00ff00</item>
+    <item name="green0" type="color">#008000</item>
+    <item name="green1" type="color">#008040</item>
+    <item name="green2" type="color">#008080</item>
+    <item name="green3" type="color">#006060</item>
+    <item name="green4" type="color">#004040</item>
+
     <item name="white" type="color">#FFFFFF</item>
+    <item name="white0" type="color">#FFFFFF</item>
+    <item name="white1" type="color">#ffc0c0</item>
+    <item name="white2" type="color">#ffc0c0</item>
+    <item name="white3" type="color">#80c0ff</item>
+    <item name="white4" type="color">#80c0ff</item>
+
     <item name="black" type="color">#000000</item>
     <item name="orange" type="color">#FF8000</item>
     <item name="yellow" type="color">#FFFF00</item>
